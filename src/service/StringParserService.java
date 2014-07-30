@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class StringPreparerService {
+public class StringParserService implements IStringParserService {
 
 	// private static String blackList = "[.,:;!%&/()=?]";
 	private static HashMap<String, String> stemWords = getStemWordsFromFile("ressources/wordlist_german");
@@ -17,7 +17,7 @@ public class StringPreparerService {
 	private static String whiteList = "[^a-zA-Z0-9\\sÄäÖöÜüß]";
 	private static HashMap<String, String> specialCharacters = getSpecialCharacters();
 
-	public StringPreparerService() {
+	public StringParserService() {
 	}
 
 	/**

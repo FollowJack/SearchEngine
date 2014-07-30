@@ -9,15 +9,10 @@ import java.util.HashSet;
 
 import model.Document;
 
-public class SearchService {
-	
-	public boolean Find42(String searchedString){
-		return true;
-	}
-	
+public class SearchService implements ISearchService{
 	public Document parseToDocument(String original){
 		Document document = new Document(original);
-		StringPreparerService stringService = new StringPreparerService();
+		IStringParserService stringService = new StringParserService();
 		//prepare the document
 		original = stringService.cleanString(original);
 		document.setParsed(stringService.tokenisation(original));

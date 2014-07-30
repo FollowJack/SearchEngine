@@ -4,27 +4,16 @@ import java.util.Date;
 import java.util.HashSet;
 
 public class Document {
-	int id;
 	String original;
 	HashSet<String> parsed;
 	Object ranking;
 	int version;
 	Date created;
 
-	public Document() {
-		created = new Date();
-	}
-
 	public Document(String originalString) {
 		original = originalString;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+		created = new Date();
+		version = 1;
 	}
 
 	public String getOriginal() {
