@@ -8,71 +8,62 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import com.sun.corba.se.spi.orb.StringPair;
+import com.sun.org.apache.regexp.internal.recompile;
+
 import model.Document;
 import service.SearchService;
+import service.StringPreparerService;
 
 public class SearchController {
 
 	private HashSet<Document> documents;
-	private HashMap<String, List<Document>> indexes;
+	private HashMap<String, ArrayList<Document>> indexes;
+	private SearchService _searchService;
+	private StringPreparerService _stringService;
 	
-	public SearchController(){
-		parseSourceFileToDocuments("ressources/german_news_example"); //Default 
-		createIndexMap();
+	
+	public SearchController(String fileDirectory) {
+		_searchService = new SearchService();
+		_stringService = new StringPreparerService();
+		documents = _searchService.parseSourceFileToDocuments(fileDirectory); // Default
+		indexes = _searchService.createIndexMap(documents);
 	}
-	
-	public SearchController(String fileDirectory){
-		parseSourceFileToDocuments(fileDirectory);
-		createIndexMap();
-	}
-	
 
-	private void parseSourceFileToDocuments(String fileDirectory) {
-		SearchService service = new SearchService();
+	public ArrayList<Document> search(String searchPhrase) {
+		ArrayList<Document> searchedDocuments = new ArrayList<Document>();
 
-		// load file
-		try (BufferedReader reader = new BufferedReader(new FileReader(
-				fileDirectory))) {
-			String currentLine;
-			String contentLine;
-			while ((currentLine = reader.readLine()) != null) {
-				contentLine = currentLine; // ToDo: cut index and tabulator
-				Document document = service.parseToDocument(contentLine);
-				documents.add(document);
-			}
+		if (searchPhrase.isEmpty())
+			return searchedDocuments;
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		searchPhrase = _stringService.cleanString(searchPhrase);
+		String[] splittedPhrase = searchPhrase.split("\\s");
+		for (int i = 0; i < splittedPhrase.length; i++) {
+			splittedPhrase[i] = _stringService.getBaseFormWord(splittedPhrase[i]);
 		}
-	}
-
-	private void createIndexMap() {
-		indexes = new HashMap<String, List<Document>>();
-		List<Document> mappedDocuments = null;
-
-		for (Document document : documents) {
-			for (String word : document.getParsed()) {
-				mappedDocuments = indexes.containsKey(word) 
-						? indexes.get(word)
-						: new ArrayList<Document>();
-						
-				mappedDocuments.add(document);
-				indexes.put(word, mappedDocuments);
+		
+		if(splittedPhrase.length == 1)
+			return indexes.get(splittedPhrase[0]);
+		
+		ArrayList<Document> phrase1 = indexes
+				.get(splittedPhrase[0]);
+		ArrayList<Document> phrase2 = indexes
+				.get(splittedPhrase[2]);
+		
+		if(splittedPhrase[1].equals("and")){
+			for (Document document : phrase2) {
+				if (phrase1.contains(document))
+					searchedDocuments.add(document);
 			}
 		}
-	}
-	
-	public List<Document> search(String searchPhrase){
-		List<Document> searchedDocuments = new ArrayList<Document>();
-		if(searchPhrase.contains("&")){
-			//case (word & word) | word
-			if(searchPhrase.contains("|"));
-			//case word & word
-			else;
+		
+		if(splittedPhrase[1].equals("or")){
+			searchedDocuments = phrase1;
+			for (Document document : phrase2) {
+				if (!phrase1.contains(document))
+					searchedDocuments.add(document);
+			}
 		}
-		else if(searchPhrase.contains("|")); //case word | word
-		else
-			searchedDocuments = indexes.get(searchPhrase); //case single word
 		
 		return searchedDocuments;
 	}

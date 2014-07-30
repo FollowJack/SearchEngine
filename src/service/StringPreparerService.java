@@ -67,12 +67,16 @@ public class StringPreparerService {
 	public HashSet<String> reduceToBaseForm(HashSet<String> words) {
 		HashSet<String> baseFormSet = new HashSet<>();
 		for (String word : words) {
-			if (stemWords.containsKey(word))
-				baseFormSet.add(stemWords.get(word));
-			else
-				baseFormSet.add(word);
+			baseFormSet.add(getBaseFormWord(word));
 		}
 		return baseFormSet;
+	}
+
+	public String getBaseFormWord(String word) {
+		if (stemWords.containsKey(word))
+			return stemWords.get(word);
+
+		return word;
 	}
 
 	public HashSet<String> removeStopWords(HashSet<String> words) {

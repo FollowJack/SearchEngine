@@ -10,9 +10,13 @@ public class Document {
 	Object ranking;
 	int version;
 	Date created;
-	
-	public Document(){
+
+	public Document() {
 		created = new Date();
+	}
+
+	public Document(String originalString) {
+		original = originalString;
 	}
 
 	public int getId() {
@@ -63,5 +67,8 @@ public class Document {
 		this.created = created;
 	}
 
-	
+	@Override
+	public String toString() {
+		return original;
+	}
 }
