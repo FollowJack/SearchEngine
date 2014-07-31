@@ -12,8 +12,8 @@ import java.util.Set;
 public interface IStringParserService {
 
 	public String cleanString(String original);
-	public HashSet<String> tokenisation(String cleanedString);
-	public HashSet<String> reduceToBaseForm(HashSet<String> words);
+	public HashMap<String, Integer> tokenisation(String cleanedString);
+	public HashMap<String, Integer> reduceToBaseForm(HashMap<String, Integer> words);
 	public String getBaseFormWord(String word);
-	public HashSet<String> removeStopWords(HashSet<String> words);
+	public HashMap<String, Integer> removeStopWords(HashMap<String, Integer> words);
 }

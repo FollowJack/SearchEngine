@@ -1,11 +1,12 @@
 package model;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Document {
 	String original;
-	HashSet<String> parsed;
+	HashMap<String, Integer> parsed;
 	Object ranking;
 	int version;
 	Date created;
@@ -24,11 +25,11 @@ public class Document {
 		this.original = original;
 	}
 
-	public HashSet<String> getParsed() {
+	public HashMap<String, Integer> getParsed() {
 		return parsed;
 	}
 
-	public void setParsed(HashSet<String> parsed) {
+	public void setParsed(HashMap<String, Integer> parsed) {
 		this.parsed = parsed;
 	}
 

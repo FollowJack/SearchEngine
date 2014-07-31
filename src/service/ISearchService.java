@@ -10,6 +10,6 @@ public interface ISearchService {
 
 	public Document parseToDocument(String original);
 	public HashSet<Document> parseSourceFileToDocuments(String fileDirectory);
-	public HashMap<String, ArrayList<Document>> createIndexMap(HashSet<Document> documents);
+//	public HashMap<String, ArrayList<Document>> createIndexMap(HashSet<Document> documents);
 
 }

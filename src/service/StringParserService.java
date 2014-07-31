@@ -49,12 +49,16 @@ public class StringParserService implements IStringParserService {
 	 * @param cleanedString
 	 * @return
 	 */
-	public HashSet<String> tokenisation(String cleanedString) {
-		HashSet<String> tokens = new HashSet<String>();
+	public HashMap<String, Integer> tokenisation(String cleanedString) {
+		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
 		String[] words = cleanedString.split("\\s+");
 		// Add each word to set
 		for (String word : words) {
-			tokens.add(word);
+			int wordCounter = 0;
+			if (tokens.containsKey(word)) {
+				wordCounter = tokens.get(word) + 1;
+				tokens.put(word, wordCounter);
+			}
 		}
 		return tokens;
 	}
@@ -64,10 +68,15 @@ public class StringParserService implements IStringParserService {
 	 * 
 	 * @param words
 	 */
-	public HashSet<String> reduceToBaseForm(HashSet<String> words) {
-		HashSet<String> baseFormSet = new HashSet<>();
-		for (String word : words) {
-			baseFormSet.add(getBaseFormWord(word));
+	public HashMap<String, Integer> reduceToBaseForm(
+			HashMap<String, Integer> words) {
+		HashMap<String, Integer> baseFormSet = new HashMap<String, Integer>();
+		Iterator it = words.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it
+					.next();
+			baseFormSet.put(getBaseFormWord(pairs.getKey()), pairs.getValue());
+			it.remove(); // avoids a ConcurrentModificationException
 		}
 		return baseFormSet;
 	}
@@ -79,15 +88,20 @@ public class StringParserService implements IStringParserService {
 		return word;
 	}
 
-	public HashSet<String> removeStopWords(HashSet<String> words) {
-		HashSet<String> cleanWords = new HashSet<String>();
+	public HashMap<String, Integer> removeStopWords(
+			HashMap<String, Integer> words) {
+		HashMap<String, Integer> cleanWords = new HashMap<String, Integer>();
 
 		if (words == null || words.isEmpty())
 			return cleanWords;
 
-		for (String word : words) {
-			if (!stopWords.contains(word))
-				cleanWords.add(word);
+		Iterator it = words.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Integer> pairs = (Map.Entry<String, Integer>) it
+					.next();
+			if (!stopWords.contains(pairs.getKey()))
+				cleanWords.put(pairs.getKey(), pairs.getValue());
+			it.remove(); // avoids a ConcurrentModificationException
 		}
 		return cleanWords;
 	}

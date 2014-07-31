@@ -41,20 +41,21 @@ public class SearchService implements ISearchService{
 		return documents;
 	}
 	
-	public HashMap<String, ArrayList<Document>> createIndexMap(HashSet<Document> documents) {
-		HashMap<String, ArrayList<Document>> indexes = new HashMap<String, ArrayList<Document>>();
-
-		for (Document document : documents) {
-			for (String word : document.getParsed()) {
-				ArrayList<Document> mappedDocuments = indexes.containsKey(word) 
-						? indexes.get(word)
-						: new ArrayList<Document>();
-						
-				mappedDocuments.add(document);
-				indexes.put(word, mappedDocuments);
-			}
-		}
-		
-		return indexes;
-	}
+	//For index revearsal
+//	public HashMap<String, ArrayList<Document>> createIndexMap(HashSet<Document> documents) {
+//		HashMap<String, ArrayList<Document>> indexes = new HashMap<String, ArrayList<Document>>();
+//
+//		for (Document document : documents) {
+//			for (String word : document.getParsed()) {
+//				ArrayList<Document> mappedDocuments = indexes.containsKey(word) 
+//						? indexes.get(word)
+//						: new ArrayList<Document>();
+//						
+//				mappedDocuments.add(document);
+//				indexes.put(word, mappedDocuments);
+//			}
+//		}
+//		
+//		return indexes;
+//	}
 }
